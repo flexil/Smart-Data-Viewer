@@ -1,0 +1,74 @@
+import streamlit as st
+import pandas as pd
+
+
+def display_selected_columns(df, selected_columns, sort_orders):
+    """Displays the user-selected columns from the uploaded DataFrame with chosen sort orders.
+
+    Args:
+        df (pd.DataFrame): The uploaded DataFrame containing the data.
+        selected_columns (list): A list of column names selected by the user.
+        sort_orders (dict): A dictionary mapping column names to their sort orders (ascending or descending).
+    """
+
+    if selected_columns:
+        sorted_df = df[selected_columns].copy()  # Avoid modifying original DataFrame
+        for col, order in sort_orders.items():
+            if order == "Ascending":
+                sorted_df.sort_values(col, inplace=True, ascending=True)
+            elif order == "Descending":
+                sorted_df.sort_values(col, inplace=True, ascending=False)
+            else:
+                st.warning(f"Invalid sort order for '{col}': {order}")
+        st.dataframe(sorted_df)
+    else:
+        st.warning("Please select at least one column to display.")
+
+
+def show_progress_bar():
+    """Displays a progress bar while the file is uploading."""
+    progress_bar = st.progress(0)
+    last_progress = 0
+    while not uploaded_file.is_uploaded:
+        # Simulate progress for demonstration purposes (replace with actual file size tracking)
+        progress = min(100, last_progress + 10)
+        progress_bar.progress(progress)
+        last_progress = progress
+    progress_bar.empty()  # Clear the progress bar after upload
+
+
+def main():
+    """Main function to handle file upload, column selection, and sorting."""
+
+    # Set the page title using st.beta_set_page_config
+    st.beta_set_page_config(page_title="Column Selector App with Sorting")
+
+    # File upload widget with progress bar
+    uploaded_file = st.file_uploader("Upload Excel File:", type="xlsx", on_change=show_progress_bar)
+
+    if uploaded_file is not None:
+        try:
+            # Read the uploaded file into a DataFrame
+            df = pd.read_excel(uploaded_file)
+
+            # Get a list of all column names
+            column_names = df.columns.tolist()
+
+            # Create multiselect widget for column selection
+            selected_columns = st.multiselect("Select Columns to Display:", options=column_names, default=column_names)
+
+            # Create a dictionary to store chosen sort orders (default: ascending)
+            sort_orders = {col: "Ascending" for col in selected_columns}
+
+            # Radio buttons for each column to choose sort order
+            for col in selected_columns:
+                sort_option = st.radio(f"Sort Order for '{col}'", ("Ascending", "Descending"), key=col)
+                sort_orders[col] = sort_option
+
+            # Call the function to display selected and sorted columns
+            display_selected_columns(df, selected_columns, sort_orders)
+
+        except Exception as e:
+            st.error(f"Error reading the file: {e}")
+
+main()
