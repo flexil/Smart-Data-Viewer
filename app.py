@@ -40,7 +40,7 @@ def show_progress_bar():
 def main():
     """Main function to handle file upload, column selection, and sorting."""
 
-    # Set the page title using st.beta_set_page_config
+
     st.beta_set_page_config(page_title="Column Selector App with Sorting")
 
     # File upload widget with progress bar
@@ -48,24 +48,24 @@ def main():
 
     if uploaded_file is not None:
         try:
-            # Read the uploaded file into a DataFrame
+          
             df = pd.read_excel(uploaded_file)
 
-            # Get a list of all column names
+          
             column_names = df.columns.tolist()
 
-            # Create multiselect widget for column selection
+      
             selected_columns = st.multiselect("Select Columns to Display:", options=column_names, default=column_names)
 
-            # Create a dictionary to store chosen sort orders (default: ascending)
+    
             sort_orders = {col: "Ascending" for col in selected_columns}
 
-            # Radio buttons for each column to choose sort order
+   
             for col in selected_columns:
                 sort_option = st.radio(f"Sort Order for '{col}'", ("Ascending", "Descending"), key=col)
                 sort_orders[col] = sort_option
 
-            # Call the function to display selected and sorted columns
+    
             display_selected_columns(df, selected_columns, sort_orders)
 
         except Exception as e:
