@@ -45,7 +45,7 @@ def main():
     st.title("Excel Column Explorer Application")
 
     # File upload widget with progress bar
-    uploaded_file = st.file_uploader("Upload Excel File:", type="xlsx", on_change=show_progress_bar)
+    uploaded_file = st.file_uploader("Please Upload Excel File:", type="xlsx", on_change=show_progress_bar)
 
     if uploaded_file is not None:
         try:
