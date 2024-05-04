@@ -25,16 +25,19 @@ def display_selected_columns(df, selected_columns, sort_orders):
         st.warning("Please select at least one column to display.")
 
 
-def show_progress_bar():
+def show_progress_bar(uploaded_file):
     """Displays a progress bar while the file is uploading."""
-    progress_bar = st.progress(0)
-    last_progress = 0
-    while not uploaded_file.is_uploaded:
-        # Simulate progress for demonstration purposes (replace with actual file size tracking)
-        progress = min(100, last_progress + 10)
-        progress_bar.progress(progress)
-        last_progress = progress
-    progress_bar.empty()  # Clear the progress bar after upload
+    if uploaded_file is not None:
+        progress_bar = st.progress(0)
+        last_progress = 0
+        while not uploaded_file.is_uploaded:
+            # Simulate progress for demonstration purposes (replace with actual file size tracking)
+            progress = min(100, last_progress + 10)
+            progress_bar.progress(progress)
+            last_progress = progress
+            time.sleep(0.1)  # Add a small delay to reduce CPU usage
+        progress_bar.empty()  # Clear the progress bar after upload
+
 
 
 def main():
