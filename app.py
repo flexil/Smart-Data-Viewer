@@ -41,7 +41,7 @@ def main():
     """Main function to handle file upload, column selection, and sorting."""
 
 
-   st.set_page_config(page_title="Column Selector App with Sorting")
+    st.set_page_config(page_title="Column Selector App with Sorting")
 
     # File upload widget with progress bar
     uploaded_file = st.file_uploader("Upload Excel File:", type="xlsx", on_change=show_progress_bar)
