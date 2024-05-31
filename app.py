@@ -29,12 +29,14 @@ def show_progress_bar(uploaded_file):
     if uploaded_file is not None:
         progress_bar = st.progress(0)
         last_progress = 0
-        while not uploaded_file.is_uploaded:
-            # Simulate progress for demonstration purposes (replace with actual file size tracking)
-            progress = min(100, last_progress + 10)
+        uploaded_bytes = uploaded_file.getvalue()
+        total_bytes = len(uploaded_bytes)
+        while uploaded_file is not None and len(uploaded_bytes) < total_bytes:
+            # Simulate progress for demonstration purposes
+            progress = min(100, len(uploaded_bytes) / total_bytes * 100)
             progress_bar.progress(progress)
-            last_progress = progress
             time.sleep(0.1)  # Add a small delay to reduce CPU usage
+            uploaded_bytes = uploaded_file.getvalue()
         progress_bar.empty()  # Clear the progress bar after upload
 
 def main():
@@ -50,24 +52,15 @@ def main():
 
     if uploaded_file is not None:
         try:
-          
             df = pd.read_excel(uploaded_file)
-
-          
             column_names = df.columns.tolist()
-
-      
             selected_columns = st.multiselect("Select Columns to Display:", options=column_names, default=column_names)
-
-    
             sort_orders = {col: "Ascending" for col in selected_columns}
 
-   
             for col in selected_columns:
                 sort_option = st.radio(f"Sort Order for '{col}'", ("Ascending", "Descending"), key=col)
                 sort_orders[col] = sort_option
 
-    
             display_selected_columns(df, selected_columns, sort_orders)
 
         except Exception as e:
