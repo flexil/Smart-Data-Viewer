@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+import time
 
 def display_selected_columns(df, selected_columns, sort_orders):
     """Displays the user-selected columns from the uploaded DataFrame with chosen sort orders.
@@ -24,7 +24,6 @@ def display_selected_columns(df, selected_columns, sort_orders):
     else:
         st.warning("Please select at least one column to display.")
 
-
 def show_progress_bar(uploaded_file):
     """Displays a progress bar while the file is uploading."""
     if uploaded_file is not None:
@@ -38,8 +37,6 @@ def show_progress_bar(uploaded_file):
             time.sleep(0.1)  # Add a small delay to reduce CPU usage
         progress_bar.empty()  # Clear the progress bar after upload
 
-
-
 def main():
     """Main function to handle file upload, column selection, and sorting."""
 
@@ -48,7 +45,8 @@ def main():
     st.title("Excel Column Explorer Application")
 
     # File upload widget with progress bar
-    uploaded_file = st.file_uploader("Please Upload Excel File:", type="xlsx", on_change=show_progress_bar)
+    uploaded_file = st.file_uploader("Please Upload Excel File:", type="xlsx")
+    show_progress_bar(uploaded_file)
 
     if uploaded_file is not None:
         try:
